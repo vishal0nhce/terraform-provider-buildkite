@@ -23,6 +23,7 @@ type Team struct {
 	Slug              string `json:"slug,omitempty"`
 	Name              string `json:"name,omitempty"`
 	Description       string `json:"description,omitempty"`
+	Permissions       string `json:"permissions,omitempty"`
 	Privacy           string `json:"privacy,omitempty"`
 	IsDefaultTeam     bool   `json:"isDefaultTeam,omitempty"`
 	DefaultMemberRole string `json:"defaultMemberRole,omitempty"`
@@ -57,6 +58,7 @@ query GetTeam($teamSlug: ID!) {
     name
     description
     createdAt
+    permissions
     privacy
     isDefaultTeam
     defaultMemberRole
@@ -90,6 +92,7 @@ mutation TeamNewMutation($teamCreateInput: TeamCreateInput!) {
         name
         description
         createdAt
+        permissions
         privacy
         isDefaultTeam
         defaultMemberRole
@@ -105,6 +108,7 @@ mutation TeamNewMutation($teamCreateInput: TeamCreateInput!) {
 		"description":       team.Description,
 		"isDefaultTeam":     team.IsDefaultTeam,
 		"defaultMemberRole": team.DefaultMemberRole,
+		"permissions":       team.Permissions,
 		"privacy":           team.Privacy,
 	})
 
@@ -128,6 +132,7 @@ mutation TeamUpdateMutation($teamUpdateInput: TeamUpdateInput!) {
       name
       description
       createdAt
+      permissions
       privacy
       isDefaultTeam
       defaultMemberRole
@@ -142,6 +147,7 @@ mutation TeamUpdateMutation($teamUpdateInput: TeamUpdateInput!) {
 		"description":       team.Description,
 		"isDefaultTeam":     team.IsDefaultTeam,
 		"defaultMemberRole": team.DefaultMemberRole,
+		"permissions":       team.Permissions,
 		"privacy":           team.Privacy,
 	})
 

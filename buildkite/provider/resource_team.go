@@ -50,6 +50,38 @@ func resourceTeam() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
+			"permissions" {
+			    Type:     schema.TypeList,
+                Optional: true,
+                Elem: &schema.Resource{
+                	Schema: map[string]*schema.Schema{
+                	    "pipelineView": {
+                        	Type:     schema.TypeBool,
+                        	Optional: true,
+                        	Default: true
+                        },
+                        "teamUpdate": {
+                        	Type:     schema.TypeString,
+                        	Optional: true,
+                        	Default: true
+                        },
+                        "teamDelete": {
+                        	Type:     schema.TypeString,
+                        	Optional: true,
+                        	Default: false
+                        },
+                        "teamMemberCreate": {
+                            Type:     schema.TypeString,
+                            Optional: true,
+                            Default: true
+                        },
+                        "teamPipelineCreate": {
+                            Type:     schema.TypeString,
+                            Optional: true,
+                            Default: false
+                        }
+                },
+			},
 			"privacy": {
 				Type:         schema.TypeString,
 				Optional:     true,
@@ -138,6 +170,7 @@ func updateTeamFromAPI(d *schema.ResourceData, t *client.Team) error {
 	d.Set("name", t.Name)
 	d.Set("description", t.Description)
 	d.Set("created_at", t.CreatedAt)
+	d.Set("permissions", t.Permissions)
 	d.Set("privacy", t.Privacy)
 	d.Set("is_default_team", t.IsDefaultTeam)
 	d.Set("default_member_role", t.DefaultMemberRole)
@@ -157,6 +190,7 @@ func prepareTeamRequestPayload(d *schema.ResourceData) *client.Team {
 	req.Slug = d.Get("slug").(string)
 	req.Name = d.Get("name").(string)
 	req.Description = d.Get("description").(string)
+	req.Permissions = d.Get("permissions").(string)
 	req.Privacy = d.Get("privacy").(string)
 	req.CreatedAt = d.Get("created_at").(string)
 	req.IsDefaultTeam = d.Get("is_default_team").(bool)
