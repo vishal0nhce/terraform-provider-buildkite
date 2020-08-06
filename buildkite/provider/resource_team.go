@@ -50,7 +50,7 @@ func resourceTeam() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"permissions" {
+			"permissions": {
 			    Type:     schema.TypeList,
                 Optional: true,
                 Elem: &schema.Resource{
@@ -58,28 +58,29 @@ func resourceTeam() *schema.Resource {
                 	    "pipelineView": {
                         	Type:     schema.TypeBool,
                         	Optional: true,
-                        	Default: true
+                        	Default: true,
                         },
                         "teamUpdate": {
                         	Type:     schema.TypeString,
                         	Optional: true,
-                        	Default: true
+                        	Default: true,
                         },
                         "teamDelete": {
                         	Type:     schema.TypeString,
                         	Optional: true,
-                        	Default: false
+                        	Default: false,
                         },
                         "teamMemberCreate": {
                             Type:     schema.TypeString,
                             Optional: true,
-                            Default: true
+                            Default: true,
                         },
                         "teamPipelineCreate": {
                             Type:     schema.TypeString,
                             Optional: true,
-                            Default: false
-                        }
+                            Default: false,
+                        },
+                    },
                 },
 			},
 			"privacy": {
@@ -170,7 +171,7 @@ func updateTeamFromAPI(d *schema.ResourceData, t *client.Team) error {
 	d.Set("name", t.Name)
 	d.Set("description", t.Description)
 	d.Set("created_at", t.CreatedAt)
-	d.Set("permissions", t.Permissions)
+	d.Set("permissions", emptySettings)
 	d.Set("privacy", t.Privacy)
 	d.Set("is_default_team", t.IsDefaultTeam)
 	d.Set("default_member_role", t.DefaultMemberRole)
@@ -190,7 +191,21 @@ func prepareTeamRequestPayload(d *schema.ResourceData) *client.Team {
 	req.Slug = d.Get("slug").(string)
 	req.Name = d.Get("name").(string)
 	req.Description = d.Get("description").(string)
-	req.Permissions = d.Get("permissions").(string)
+
+	permissionsI := d.Get("permissions").([]interface{})
+	req.Permissions = make([]client.Permissions, len(permissionsI))
+
+	for i, PermissionsI := range PermissionsI {
+	    PermissionsM := PermissionsI.(map[string]interface{})
+        req.Permissions[i] = client.Permissions{
+            PipelineView:        PermissionsM["pipelineView"].(bool),
+            TeamUpdate:          PermissionsM["teamUpdate"].(bool),
+            TeamDelete:          PermissionsM["teamDelete"].(bool),
+            TeamMemberCreate:    PermissionsM["teamMemberCreate"].(bool),
+            TeamPipelineCreate:  PermissionsM["teamPipelineCreate"].(bool),
+        }
+    }
+
 	req.Privacy = d.Get("privacy").(string)
 	req.CreatedAt = d.Get("created_at").(string)
 	req.IsDefaultTeam = d.Get("is_default_team").(bool)

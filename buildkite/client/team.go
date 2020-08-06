@@ -18,16 +18,16 @@ type teamResponse struct {
 }
 
 type Team struct {
-	Id                string `json:"id,omitempty"`
-	UUID              string `json:"uuid,omitempty"`
-	Slug              string `json:"slug,omitempty"`
-	Name              string `json:"name,omitempty"`
-	Description       string `json:"description,omitempty"`
-	Permissions       string `json:"permissions,omitempty"`
-	Privacy           string `json:"privacy,omitempty"`
-	IsDefaultTeam     bool   `json:"isDefaultTeam,omitempty"`
-	DefaultMemberRole string `json:"defaultMemberRole,omitempty"`
-	CreatedAt         string `json:"createdAt,omitempty"`
+	Id                string                    `json:"id,omitempty"`
+	UUID              string                    `json:"uuid,omitempty"`
+	Slug              string                    `json:"slug,omitempty"`
+	Name              string                    `json:"name,omitempty"`
+	Description       string                    `json:"description,omitempty"`
+	Permissions       map[string]interface{}    `json:"permissions,omitempty"`
+	Privacy           string                    `json:"privacy,omitempty"`
+	IsDefaultTeam     bool                      `json:"isDefaultTeam,omitempty"`
+	DefaultMemberRole string                    `json:"defaultMemberRole,omitempty"`
+	CreatedAt         string                    `json:"createdAt,omitempty"`
 }
 
 type teamCreateResponse struct {
