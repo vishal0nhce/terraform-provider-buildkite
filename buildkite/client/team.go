@@ -23,11 +23,11 @@ type Team struct {
 	Slug                        string                    `json:"slug,omitempty"`
 	Name                        string                    `json:"name,omitempty"`
 	Description                 string                    `json:"description,omitempty"`
-	MembersCanCreatePipelines   bool                      `json:"membersCanCreatePipelines,omitempty"`
 	Privacy                     string                    `json:"privacy,omitempty"`
 	IsDefaultTeam               bool                      `json:"isDefaultTeam,omitempty"`
 	DefaultMemberRole           string                    `json:"defaultMemberRole,omitempty"`
 	CreatedAt                   string                    `json:"createdAt,omitempty"`
+	MembersCanCreatePipelines   bool                      `json:"membersCanCreatePipelines,omitempty"`
 }
 
 type teamCreateResponse struct {
@@ -58,14 +58,10 @@ query GetTeam($teamSlug: ID!) {
     name
     description
     createdAt
-    permissions {
-        teamPipelineCreate {
-            allowed
-        }
-    }
     privacy
     isDefaultTeam
     defaultMemberRole
+    membersCanCreatePipelines
   }
 }`)
 	req.Var("teamSlug", c.createOrgSlug(slug))
@@ -96,14 +92,10 @@ mutation TeamNewMutation($teamCreateInput: TeamCreateInput!) {
         name
         description
         createdAt
-        permissions {
-            teamPipelineCreate {
-                allowed
-            }
-        }
         privacy
         isDefaultTeam
         defaultMemberRole
+        membersCanCreatePipelines
       }
     }
   }
@@ -140,14 +132,10 @@ mutation TeamUpdateMutation($teamUpdateInput: TeamUpdateInput!) {
       name
       description
       createdAt
-      permissions {
-        teamPipelineCreate {
-            allowed
-        }
-      }
       privacy
       isDefaultTeam
       defaultMemberRole
+      membersCanCreatePipelines
     }
   }
 }
